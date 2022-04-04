@@ -13,6 +13,7 @@ function Todolist() {
   const [todoList, setTodoList] = useState(sampleTodoList);
   const [newTodo, setNewTodo] = useState("");
 
+  //Hooks
   useEffect(() => {
     axios.get(config.API_BASE_URL + '/api/todo')
       .then((response) => {
