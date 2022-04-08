@@ -81,7 +81,7 @@ function Todolist() {
     </div>
     {todoList.map((todo) => {
       return (
-        <Todo todo={todo.description} index={todo.id} done={todo.done} key={todo.id.toString()} toggleDone={toggleDone} deleteTodo={deleteTodo} />
+        <Todo todo={todo.description} index={todo.id} done={todo.done} key={todo.todo_id.toString()} toggleDone={toggleDone} deleteTodo={deleteTodo} />
       );
     })}
     </article>
