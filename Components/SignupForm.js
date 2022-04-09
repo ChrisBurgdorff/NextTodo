@@ -21,11 +21,26 @@ function SignupForm() {
         <div className="field">
           <label className="label">Password</label>
           <div className="control has-icons-left">
-            <input className="input is-rounded" type="text" placeholder="Must be 8 characters" />
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
+            <input className="input is-rounded" type="password" placeholder="Must be 8 characters" />
+            <span className="icon is-small is-left">
+              <i className="fas fa-lock"></i>
             </span>
           </div>
+        </div>
+      </div>
+      <div className="panel-block">
+        <div className="field">
+          <div className="control">
+            <label className="checkbox">
+              <input type="checkbox" />
+              I agree to the <a href="#">terms and conditions</a>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className="panel-block">
+        <div className="control">
+          <button className="button is-primary">Submit</button>
         </div>
       </div>
     </article>
