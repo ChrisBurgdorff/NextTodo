@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verify } from "jsonwebtoken";
-const appConfig = require("../config");
+const appConfig = require("../../config");
 
 const secret = appConfig.JWT_SECRET;
 

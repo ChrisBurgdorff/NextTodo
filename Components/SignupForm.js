@@ -1,6 +1,24 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import config from "../config";
 
 function SignupForm() {
+
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
+function signup(e) {
+  e.preventDefault();
+  axios.post(config.API_BASE_URL + '/api/auth/register', {
+    email: email,
+    password: password
+  }).then((response) => {
+    console.log(response.data);
+  }).catch((err) => {
+
+  });
+}
+
   return (
     <article className="panel is-info">
       <p className="panel-heading">

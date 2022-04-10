@@ -10,7 +10,7 @@ function Todolist() {
     {id: 2, description: "Sleep", done: false}
   ];
 
-  const [todoList, setTodoList] = useState(sampleTodoList);
+  const [todoList, setTodoList] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
   //Hooks
@@ -80,6 +80,7 @@ function Todolist() {
       </p>
     </div>
     {todoList.map((todo) => {
+      console.log(todo);
       return (
         <Todo todo={todo.description} index={todo.id} done={todo.done} key={todo.todo_id.toString()} toggleDone={toggleDone} deleteTodo={deleteTodo} />
       );
