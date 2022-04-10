@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 
 function Navigation() {
+
+  //Get logged in user
+  const loggedInUser = useContext(UserContext);
 
   return(
     <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -26,6 +29,7 @@ function Navigation() {
             About 
           </a>
         </div>
+        <a className="navbar-item"></a>
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">

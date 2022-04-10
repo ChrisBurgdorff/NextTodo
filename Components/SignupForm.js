@@ -1,11 +1,18 @@
 import axios from "axios";
 import React, { useState } from "react";
 import config from "../config";
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 
 function SignupForm() {
 
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
+const [statusMessage, setStatusMessage] = useState("");
+const [hasError, setHasError] = useState(false);
+const [cookie, setCookie] = useCookies(['TodoJWT']);
+
+const router = useRouter();
 
 function signup(e) {
   e.preventDefault();
@@ -14,8 +21,29 @@ function signup(e) {
     password: password
   }).then((response) => {
     console.log(response.data);
+    if (response.status === 200) {
+      //User was created successfully
+      axios.post(config.API_BASE_URL + '/api/auth/login', {
+        email: email,
+        password: password
+      }).then((response) => {
+        if (response.data.accessToken) {
+          setCookie('TodoJWT', response.data.accessToken);
+          router.push("/t");
+        } else {
+          setHasError(true);
+          setStatusMessage("Could Not Log In");
+        }
+      });
+    } else {
+      //User not created successfully
+      setHasError(true);
+      setStatusMessage(response.data.message || "User Not Created");
+    }
   }).catch((err) => {
-
+    //User not created successfully
+    setHasError(true);
+    setStatusMessage(response.data.message || "User Not Created");
   });
 }
 
@@ -29,8 +57,8 @@ function signup(e) {
           <label className="label">Email</label>
           <div className="control has-icons-left">
             <input className="input is-rounded" type="text" placeholder="Enter valid email" />
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
             </span>
           </div>
         </div>
@@ -58,8 +86,11 @@ function signup(e) {
       </div>
       <div className="panel-block">
         <div className="control">
-          <button className="button is-primary">Submit</button>
+          <button className="button is-primary" onClick={signup}>Submit</button>
         </div>
+      </div>
+      <div className="panel-block">
+        {hasError && <span className="has-text-danger"><strong>{statusMessage}</strong></span>}
       </div>
     </article>
   );
