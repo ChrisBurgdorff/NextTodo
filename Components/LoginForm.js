@@ -16,7 +16,7 @@ function LoginForm() {
 
   function login(e) {
     setHasError(false);
-    e.preventDefault();
+    //e.preventDefault();
     axios.post(config.API_BASE_URL + '/api/auth/login', {
       email: email,
       password: password
