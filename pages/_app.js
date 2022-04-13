@@ -9,6 +9,8 @@ var jwt = require('jsonwebtoken');
 import React from 'react';
 import { useCookies } from 'react-cookie';
 import {createContext, useContext} from 'react';
+import { AuthProvider } from '../Contexts/AuthContext';
+import { CookiesProvider } from 'react-cookie';
 
 
 
@@ -19,34 +21,42 @@ function MyApp({ Component, pageProps }) {
     email: ""
   };
 
-  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
-  const UserContext = createContext();
-  
+  const [cookies, setCookie, removeCookie] = useCookies();  
 
   try {
-    const jwtToken = cookies.TodoJWT;
-    const decodedToken = jwtToken.verify(token, config.JWT_SECRET);  
-    var userId = decodedToken.id;
-    console.log("USER ID COMING FROM FUCKING CONTEXT");
-    console.log(userId); //Verify getting ID
+    console.log("IN TRY");
+    //const x = cookies.get('TodoJWT');
+    //console.log(x);
+    if (cookies.TodoJWT) {
+      const jwtToken = cookies.TodoJWT;
+      const decodedToken = jwtToken.verify(token, config.JWT_SECRET);  
+      var userId = decodedToken.id;
+      console.log("USER ID COMING FROM FUCKING CONTEXT");
+      console.log(userId); //Verify getting ID
+    } else {
+      console.log(cookies);
+      console.log("IN ELSE");
+    }
   } catch(err) {
     console.log(err);
   }
 
   return(
     <>
-      <UserContext.Provider value={nullUser} >
-        <Navigation />
-        <Component {...pageProps} />
-        <Footer />
-        <style jsx global>{`
-          #__next {
-            flex-direction: column;
-            min-height: 100vh;
-            display: flex;
-          }
-        `}</style>
-      </UserContext.Provider>
+      <CookiesProvider>
+        <AuthProvider>
+          <Navigation />
+          <Component {...pageProps} />
+          <Footer />
+          <style jsx global>{`
+            #__next {
+              flex-direction: column;
+              min-height: 100vh;
+              display: flex;
+            }
+          `}</style>
+        </AuthProvider>
+      </CookiesProvider>
     </>
   );
 }

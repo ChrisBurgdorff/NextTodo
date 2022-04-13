@@ -43,7 +43,7 @@ function signup(e) {
   }).catch((err) => {
     //User not created successfully
     setHasError(true);
-    setStatusMessage(response.data.message || "User Not Created");
+    setStatusMessage(err.message || "User Not Created");
   });
 }
 
@@ -56,7 +56,7 @@ function signup(e) {
         <div className="field">
           <label className="label">Email</label>
           <div className="control has-icons-left">
-            <input className="input is-rounded" type="text" placeholder="Enter valid email" />
+            <input className="input is-rounded" type="text" placeholder="Enter valid email" onChange={(e) => {setEmail(e.target.value);}} />
             <span className="icon is-small is-left">
               <i className="fas fa-envelope"></i>
             </span>
@@ -67,7 +67,7 @@ function signup(e) {
         <div className="field">
           <label className="label">Password</label>
           <div className="control has-icons-left">
-            <input className="input is-rounded" type="password" placeholder="Must be 8 characters" />
+            <input className="input is-rounded" type="password" placeholder="Must be 8 characters" onChange={(e) => {setPassword(e.target.value);}} />
             <span className="icon is-small is-left">
               <i className="fas fa-lock"></i>
             </span>

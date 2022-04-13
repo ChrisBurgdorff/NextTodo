@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
+import { AuthContext } from "../Contexts/AuthContext";
 
 function Navigation() {
 
   //Get logged in user
-  const loggedInUser = useContext(UserContext);
+  const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
 
   return(
     <nav className="navbar" role="navigation" aria-label="main navigation">
