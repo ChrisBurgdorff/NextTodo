@@ -22,6 +22,9 @@ function Navigation() {
 
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-start">
+          <a className="navbar-item" href="/t">
+            {(loggedInUser) && loggedInUser.email}
+          </a>
           <a className="navbar-item" href="/">
             Home
           </a>

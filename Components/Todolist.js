@@ -12,6 +12,7 @@ function Todolist() {
 
   const [todoList, setTodoList] = useState([]);
   const [newTodo, setNewTodo] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   //Hooks
   useEffect(() => {
@@ -19,6 +20,20 @@ function Todolist() {
       .then((response) => {
         setTodoList(response.data);
       });
+  }, []);
+
+  function showUser() {
+    alert("Hi User");
+    axios.get(config.API_BASE_URL + '/api/user/1')
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data[0]);
+        console.log(response.data[0].email);
+      });
+  }
+
+  useEffect(() => {
+    
   }, []);
 
   function addTodo(e) {
@@ -69,6 +84,7 @@ function Todolist() {
     <p className="panel-heading">
       My Todo List
     </p>
+    <button className="button is-primary" onClick={showUser}>Show User</button>
     
     <div className="panel-block">
       <p className="control has-icons-left">
