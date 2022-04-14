@@ -24,7 +24,10 @@ function LoginForm() {
       if (response.data.accessToken) {
         //Login successful
         if (response.status === 200) {
-          setCookie('TodoJWT', response.data.accessToken);
+          setCookie('TodoJWT', response.data.accessToken, {
+            maxAge: 86400,
+            httpOnly: true
+          });
           router.push("/t");
         } else {
           //Login unsuccessful
