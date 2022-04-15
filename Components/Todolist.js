@@ -22,20 +22,6 @@ function Todolist() {
       });
   }, []);
 
-  function showUser() {
-    alert("Hi User");
-    axios.get(config.API_BASE_URL + '/api/user/1')
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data[0]);
-        console.log(response.data[0].email);
-      });
-  }
-
-  useEffect(() => {
-    
-  }, []);
-
   function addTodo(e) {
     axios.post(config.API_BASE_URL + '/api/todo', {
       description: newTodo,
@@ -83,9 +69,7 @@ function Todolist() {
     <article className="panel is-success">
     <p className="panel-heading">
       My Todo List
-    </p>
-    <button className="button is-primary" onClick={showUser}>Show User</button>
-    
+    </p>    
     <div className="panel-block">
       <p className="control has-icons-left">
       <input className="input is-primary" type="text" placeholder="Add New" value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />

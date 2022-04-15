@@ -28,6 +28,7 @@ function LoginForm() {
             maxAge: 86400,
             httpOnly: true
           });
+          axios.defaults.headers.common["x-access-token"] = response.data.accessToken;
           router.push("/t");
         } else {
           //Login unsuccessful

@@ -5,6 +5,7 @@ function Navigation() {
 
   //Get logged in user
   const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
+  console.log(loggedInUser);
 
   return(
     <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -36,13 +37,18 @@ function Navigation() {
         <a className="navbar-item"></a>
         <div className="navbar-end">
           <div className="navbar-item">
-            <div className="buttons">
+            <div className="buttons">              
               <a className="button is-primary" href="/signup">
                 <strong>Sign up</strong>
               </a>
-              <a className="button is-light" href="/login">
+              {(!loggedInUser || loggedInUser.id == 0) &&
+               <a className="button is-light" href="/login">
                 Log in
-              </a>
+              </a>}
+              {(loggedInUser && loggedInUser.id > 0) &&
+              <a className="button is-light" href="/logout">
+                <strong>Log Out</strong>
+              </a>}
             </div>
           </div>
         </div>

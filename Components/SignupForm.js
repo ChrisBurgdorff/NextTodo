@@ -28,7 +28,11 @@ function signup(e) {
         password: password
       }).then((response) => {
         if (response.data.accessToken) {
-          setCookie('TodoJWT', response.data.accessToken);
+          setCookie('TodoJWT', response.data.accessToken, {
+            maxAge: 86400,
+            httpOnly: true
+          });
+          axios.defaults.headers.common["x-access-token"] = response.data.accessToken;
           router.push("/t");
         } else {
           setHasError(true);
