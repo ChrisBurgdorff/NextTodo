@@ -20,7 +20,7 @@ function Todolist() {
       .then((response) => {
         setTodoList(response.data);
       });
-  }, []);
+  }, [todoList]);
 
   function addTodo(e) {
     axios.post(config.API_BASE_URL + '/api/todo', {
@@ -33,7 +33,6 @@ function Todolist() {
   }
 
   function toggleDone(todoIndex) {
-    console.log("in toggle done");
     var todoToModify = todoList.find(t => t.id === todoIndex);
     var replacementTodo = {
       id: todoToModify.id,
@@ -55,9 +54,6 @@ function Todolist() {
   function deleteTodo(todoIndex) {
     axios.delete(config.API_BASE_URL + "/api/todo/" + todoIndex)
       .then((response) => {
-        console.log("Response from Delete");
-        console.log(response);
-        console.log(response.data);
         setTodoList(todoList.filter((t) => {
           return (t.id != todoIndex);
         }));
@@ -80,7 +76,6 @@ function Todolist() {
       </p>
     </div>
     {todoList.map((todo) => {
-      console.log(todo);
       return (
         <Todo todo={todo.description} index={todo.id} done={todo.done} key={todo.todo_id.toString()} toggleDone={toggleDone} deleteTodo={deleteTodo} />
       );

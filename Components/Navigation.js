@@ -1,11 +1,25 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../Contexts/AuthContext";
+import { useCookies } from 'react-cookie';
+import axios from "axios";
+import appConfig from '../config';
 
 function Navigation() {
 
   //Get logged in user
   const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
-  console.log(loggedInUser);
+  const [cookies, setCookie, removeCookie] = useCookies(["TodoJWT"]);
+
+
+  async function logout(e) {
+    removeCookie();
+    localStorage.removeItem('x-access-token');
+    const response = await axios.post(appConfig.BASE_URL + '/api/logout');
+    if (response.status === 200) {
+      //alert(response.data.message);
+    }
+    window.location.href = '/login';
+  }
 
   return(
     <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -37,16 +51,17 @@ function Navigation() {
         <a className="navbar-item"></a>
         <div className="navbar-end">
           <div className="navbar-item">
-            <div className="buttons">              
+            <div className="buttons">
+              {(!loggedInUser || loggedInUser.id == 0) &&         
               <a className="button is-primary" href="/signup">
                 <strong>Sign up</strong>
-              </a>
+              </a>}
               {(!loggedInUser || loggedInUser.id == 0) &&
                <a className="button is-light" href="/login">
                 Log in
               </a>}
               {(loggedInUser && loggedInUser.id > 0) &&
-              <a className="button is-light" href="/logout">
+              <a className="button is-light" onClick={logout}>
                 <strong>Log Out</strong>
               </a>}
             </div>

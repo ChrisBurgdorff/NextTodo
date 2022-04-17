@@ -6,29 +6,25 @@ import appConfig from "../config";
 
 function Footer() {
   const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
-  /*
-  function testUser() {
-    const myUser = {
-      id: 1,
-      email: "wes"
-    }
-    setLoggedInUser(myUser);
-  }*/
 
-  axios.get(appConfig.API_BASE_URL + '/api/currentuser')
-    .then(response => {
-      console.log("response coming from aou.getcurrentuser");
-      console.log(response.data);
-      if (response.data) {
-        const currentUser = response.data[0];
-        setLoggedInUser(currentUser);
-      } else {
+  useEffect(() => {
+    // Perform localStorage action
+    const accessToken = localStorage.getItem('x-access-token');
+    axios.defaults.headers.common["x-access-token"] = accessToken;
+    axios.get(appConfig.API_BASE_URL + '/api/currentuser')
+      .then(response => {
+        if (response.data) {
+          const currentUser = response.data[0];
+          setLoggedInUser(currentUser);
+        } else {
+          setLoggedInUser(appConfig.nullUser);
+        }
+    }).catch(err => {
+        console.log(err);
         setLoggedInUser(appConfig.nullUser);
-      }
-  }).catch(err => {
-      console.log(err);
-      setLoggedInUser(appConfig.nullUser);
-  });
+    });
+  }, [])
+
   
   return (
     <footer className="footer">

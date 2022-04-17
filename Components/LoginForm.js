@@ -8,26 +8,30 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cookie, setCookie] = useCookies(['TodoJWT']);
+  const [cookie, setCookie] = useCookies();
   const [statusMessage, setStatusMessage] = useState("");
   const [hasError, setHasError] = useState(false);
 
   const router = useRouter();
 
   function login(e) {
+    console.log("in login");
     setHasError(false);
     //e.preventDefault();
     axios.post(config.API_BASE_URL + '/api/auth/login', {
       email: email,
       password: password
     }).then((response) => {
+      console.log(response);
       if (response.data.accessToken) {
         //Login successful
         if (response.status === 200) {
+          console.log("about to set cookies");
+          console.log(response.data.accessToken);
           setCookie('TodoJWT', response.data.accessToken, {
-            maxAge: 86400,
-            httpOnly: true
+            maxAge: 86400
           });
+          localStorage.setItem('x-access-token', response.data.accessToken);
           axios.defaults.headers.common["x-access-token"] = response.data.accessToken;
           router.push("/t");
         } else {
