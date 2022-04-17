@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 function SignupForm() {
 
 const [email, setEmail] = useState("");
+const [name, setName] = useState("");
 const [password, setPassword] = useState("");
 const [statusMessage, setStatusMessage] = useState("");
 const [hasError, setHasError] = useState(false);
@@ -18,6 +19,7 @@ function signup(e) {
   e.preventDefault();
   axios.post(config.API_BASE_URL + '/api/auth/register', {
     email: email,
+    name: name,
     password: password
   }).then((response) => {
     console.log(response.data);
@@ -56,12 +58,23 @@ function signup(e) {
     <article className="panel is-info">
       <p className="panel-heading">
         Sign Up!
-      </p>    
+      </p>
+      <div className="panel-block">
+        <div className="field">
+          <label className="label">Name:</label>
+          <div className="control has-icons-left">
+            <input className="input is-rounded" type="text" placeholder="First Name" onChange={(e) => {setName(e.target.value);}} />
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+      </div>
       <div className="panel-block">
         <div className="field">
           <label className="label">Email</label>
           <div className="control has-icons-left">
-            <input className="input is-rounded" type="text" placeholder="Enter valid email" onChange={(e) => {setEmail(e.target.value);}} />
+            <input className="input is-rounded" type="text" placeholder="Valid Email" onChange={(e) => {setEmail(e.target.value);}} />
             <span className="icon is-small is-left">
               <i className="fas fa-envelope"></i>
             </span>

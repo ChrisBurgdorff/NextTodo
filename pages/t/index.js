@@ -1,7 +1,11 @@
-import styles from '../../styles/Home.module.css'
-import Todolist from '../../Components/Todolist'
+import Todolist from '../../Components/Todolist';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+
+
+  
+
   return (
     <>
       <div className="columns">
