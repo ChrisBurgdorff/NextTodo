@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../Contexts/AuthContext";
 import { useCookies } from 'react-cookie';
 import axios from "axios";
@@ -10,6 +10,29 @@ function Navigation() {
   const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
   const [cookies, setCookie, removeCookie] = useCookies(["TodoJWT"]);
 
+
+  useEffect(() => {
+    console.log("setting user");
+    // Perform localStorage action
+    const accessToken = localStorage.getItem('x-access-token');
+    axios.defaults.headers.common["x-access-token"] = accessToken;
+    axios.get(appConfig.API_BASE_URL + '/api/currentuser')
+      .then(response => {
+        if (response.data) {
+          const currentUser = response.data[0];
+          setLoggedInUser(currentUser);
+          console.log("User is set");
+        } else {
+          setLoggedInUser(appConfig.nullUser);
+        }
+    }).catch(err => {
+        console.log(err);
+        setLoggedInUser(appConfig.nullUser);
+    });
+  }, [])
+
+
+  /*
   useEffect(() => {
     // Perform localStorage action
     const accessToken = localStorage.getItem('x-access-token');
@@ -26,7 +49,7 @@ function Navigation() {
         console.log(err);
         setLoggedInUser(appConfig.nullUser);
     });
-  }, [])
+  }, [])*/
 
 
   async function logout(e) {

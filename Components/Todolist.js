@@ -18,24 +18,23 @@ function Todolist() {
 
   const {loggedInUser, setLoggedInUser} = useContext(AuthContext);
   const router = useRouter();
-  
-  useEffect(() => {
-    if (!loggedInUser) {
-      router.push("/t");
-    }
-  }, []);
 
-  
+  var todosUpdated = false;  
 
   //Hooks
   useEffect(() => {
+    console.log("in useeffect");
     if (loggedInUser) {
+      console.log("REQUEST GOING TO " + '/api/user/' + (loggedInUser.id || '0') + '/todo');
       axios.get(config.API_BASE_URL + '/api/user/' + (loggedInUser.id || '0') + '/todo')
         .then((response) => {
           setTodoList(response.data);
         });
+    } else {
+      console.log("No logged in user");
+      setLoggedInUser(config.nullUser);
     }
-  }, [todoList]);
+  }, [todosUpdated, loggedInUser?.name]);
 
   function addTodo(e) {
     axios.post(config.API_BASE_URL + '/api/todo', {
@@ -45,22 +44,25 @@ function Todolist() {
     }).then((response) => {
       setTodoList([...todoList, response.data]);
       setNewTodo("");
+      todosUpdated = !todosUpdated;
     });
   }
 
   function toggleDone(todoIndex) {
-    var todoToModify = todoList.find(t => t.id === todoIndex);
+    var todoToModify = todoList.find(t => t.todo_id === todoIndex);
     var replacementTodo = {
-      id: todoToModify.id,
+      todo_id: todoToModify.todo_id,
       description: todoToModify.description,
       done: !todoToModify.done
     };
     axios.put(config.API_BASE_URL + '/api/todo/' + todoIndex, {done: !todoToModify.done})
       .then((response) => {
-        if (response.data[0] == 1) {
+        console.log(response.data);
+        if (response.data) {
           setTodoList( [...todoList.filter((t) => {
-            return (t.id !== todoToModify.id);
-          }), replacementTodo].sort(function(a,b) {return a.id - b.id}) );
+            return (t.todo_id !== todoToModify.todo_id);
+          }), replacementTodo].sort(function(a,b) {return a.todo_id - b.todo_id}) );
+          todosUpdated = !todosUpdated;
         } else {
           console.log("Some Shit went wrong");
         }        
@@ -71,8 +73,9 @@ function Todolist() {
     axios.delete(config.API_BASE_URL + "/api/todo/" + todoIndex)
       .then((response) => {
         setTodoList(todoList.filter((t) => {
-          return (t.id != todoIndex);
+          return (t.todo_id != todoIndex);
         }));
+        todosUpdated = !todosUpdated;
       });
   }
 
@@ -99,7 +102,9 @@ function Todolist() {
     </div>
     {todoList.map((todo) => {
       return (
-        <Todo todo={todo.description} index={todo.id} done={todo.done} key={todo.todo_id.toString()} toggleDone={toggleDone} deleteTodo={deleteTodo} />
+        <>
+        <Todo todo={todo.description} index={todo.todo_id} done={todo.done} key={todo.todo_id} toggleDone={toggleDone} deleteTodo={deleteTodo} />
+        </>
       );
     })}
     </article>
