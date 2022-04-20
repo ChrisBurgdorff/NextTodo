@@ -18,11 +18,7 @@ const [nameValid, setNameValid] = useState(false);
 const [termsValid, setTermsValid] = useState(false);
 const [formValid, setFormValid] = useState(false);
 const [formValidationMessage, setFormValidationMessage] = useState(
-  `Please enter a Name.
-  Please enter a valid Email.
-  Please enter a valid Password.
-  Please accept the Terms and Conditions.
-  `
+  "Please enter a Name, valid Email, valid Password and accept the Terms."
 );
 
 const router = useRouter();
@@ -31,25 +27,47 @@ function validateEmail(email) {
   const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return res.test(String(email).toLowerCase());
 }
+function validateForm() {
+  let newMessage = "";
+  if (!nameValid || !emailValid || !passwordValid) {
+    newMessage += "Please enter a ";
+  } else if (!termsValid) {
+    newMessage += "Please "
+  }
+  setFormValid((emailValid && passwordValid && termsValid && nameValid));
+  if (!nameValid) {
+    newMessage += "Name";
+  }
+  if (!emailValid) {
+    newMessage += "valid Email, ";
+  }
+  if (!passwordValid) {
+    newMessage += "valid Password, ";
+  }
+  if (!termsValid) {
+    newMessage += "accept the terms and conditions.";
+  }
+  setFormValidationMessage(newMessage);
+}
 
 function emailChange(emailInput) {
   setEmail(emailInput);
   setEmailValid(validateEmail(emailInput));
-  setFormValid(validateEmail(emailInput) && passwordValid && termsValid && nameValid);
+  validateForm();
 }
 function nameChange(nameInput) {
   setName(nameInput);
   setNameValid((nameInput.length > 0));
-  setFormValid(emailValid && passwordValid && termsValid && (nameInput.length > 0));
+  validateForm();
 }
 function passwordChange(passwordInput) {
   setPassword(passwordInput);
   setPasswordValid(passwordInput.length >= 8);
-  setFormValid(emailValid && (passwordInput.length >= 8) && termsValid && nameValid);
+  validateForm();
 }
 function termsChange(termsInput) {
   setTermsValid(!termsValid);
-  setFormValid((emailValid && passwordValid && !termsValid && nameValid));
+  validateForm();
 }
 
 
@@ -147,11 +165,6 @@ function signup(e) {
       </div>
       <div className="panel-block">
         {hasError && <span className="has-text-danger"><strong>{statusMessage}</strong></span>}
-        {nameValid && <span className="has-text-danger">Name is valid</span>}
-        {passwordValid && <span className="has-text-danger">Password is valid</span>}
-        {emailValid && <span className="has-text-danger">Email is valid</span>}
-        {termsValid && <span className="has-text-danger">Terms is valid</span>}
-        {!formValid && <span className="has-text-danger"><strong>Form is not yet valid.</strong></span>}
       </div>
     </article>
   );
